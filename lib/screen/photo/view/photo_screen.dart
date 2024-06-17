@@ -78,6 +78,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                       }
                       return InkWell(
                         onTap: () {
+                          controller.getIndex(index);
                           Get.to(() => const WallpaperScreen(),
                               transition: Transition.downToUp,
                               arguments: controller.list[index]);
