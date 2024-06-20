@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:get/get.dart';
@@ -34,9 +33,8 @@ class PhotoController extends GetxController {
     getPhotoData();
   }
 
-  void getIndex(int i)
-  {
-    index.value=i;
+  void getIndex(int i) {
+    index.value = i;
   }
 
   //download Image

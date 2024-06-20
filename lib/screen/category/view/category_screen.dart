@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pagination/screen/photo/controller/photo_controller.dart';
 import 'package:pagination/screen/wallpaper/view/wallpaper_screen.dart';
 
-class PhotoScreen extends StatefulWidget {
-  const PhotoScreen({super.key});
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key});
 
   @override
-  State<PhotoScreen> createState() => _PhotoScreenState();
+  State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _PhotoScreenState extends State<PhotoScreen> {
-  PhotoController controller = Get.put(PhotoController());
-  ScrollController scrollController = ScrollController();
+class _CategoryScreenState extends State<CategoryScreen> {
+  final PhotoController controller = Get.put(PhotoController());
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -46,18 +45,23 @@ class _PhotoScreenState extends State<PhotoScreen> {
             }
             return Column(
               children: [
-                const Gap(20),
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.95,
-                  child: SearchBar(
-                    hintText: "Search",
-                    shadowColor: WidgetStateColor.transparent,
-                    leading: const Icon(Icons.search),
-                    onSubmitted: (value) {
-                      controller.list.clear();
-                      controller.categoryData(value);
-                      controller.getPhotoData();
-                    },
+                const Gap(5),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Obx(
+                    () => Row(
+                      children: [
+                        categoryButton("car"),
+                        const Gap(5),
+                        categoryButton("Art"),
+                        const Gap(5),
+                        categoryButton("Home"),
+                        const Gap(5),
+                        categoryButton("Wallpaper"),
+                        const Gap(5),
+                        categoryButton("Animal"),
+                      ],
+                    ),
                   ),
                 ),
                 const Gap(5),
@@ -88,7 +92,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.network(
-                              "${controller.list[index]!.previewURL}",
+                              "${controller.list[index].previewURL}",
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -103,5 +107,26 @@ class _PhotoScreenState extends State<PhotoScreen> {
         ),
       ),
     );
+  }
+
+  Widget categoryButton(String category) {
+    return ElevatedButton(
+      onPressed: () {
+        controller.categoryData(category);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: controller.category.value == category
+            ? Colors.yellow
+            : Colors.white,
+      ),
+      child: Text(category),
+    );
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(scrollListener);
+    scrollController.dispose();
+    super.dispose();
   }
 }
