@@ -138,9 +138,15 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                                 onPressed: () {},
                               ),
                               const SizedBox(height: 10),
-                              IconButton(
-                                icon: const Icon(Icons.share, color: Colors.white),
-                                onPressed: () {},
+                              Builder(
+                                builder: (context) {
+                                  return IconButton(
+                                    icon: const Icon(Icons.share, color: Colors.white),
+                                    onPressed: () async {
+                                      await controller.shareImg(context, "${controller.list[index].largeImageURL}");
+                                    },
+                                  );
+                                },
                               ),
                               const SizedBox(height: 10),
                               IconButton(

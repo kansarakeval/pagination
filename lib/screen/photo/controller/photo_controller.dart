@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:pagination/screen/photo/model/photo_model.dart';
 import 'package:pagination/utils/api_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PhotoController extends GetxController {
   Rxn<PhotoModel> photoModel = Rxn<PhotoModel>();
@@ -70,6 +72,20 @@ class PhotoController extends GetxController {
           content: Text("Error: $e"),
         ),
       );
+    }
+  }
+
+  //share Image
+  Future<void> shareImg(context, String share) async {
+    final RenderBox box = context.findRenderObject();
+    if (Platform.isAndroid) {
+      var response = await get(Uri.parse(share));
+      final documentDirectory = (await getExternalStorageDirectory())!.path;
+      File imgFile = File('$documentDirectory/flutter.png');
+      imgFile.writeAsBytesSync(response.bodyBytes);
+
+      Share.shareXFiles([XFile('$documentDirectory/flutter.png')],
+          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
     }
   }
 }
